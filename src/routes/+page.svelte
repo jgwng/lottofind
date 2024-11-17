@@ -1,39 +1,37 @@
 <script>
+	import { onMount, onDestroy} from 'svelte';
+	import {handleResize} from '../service/maputil';
+	import {getSidoData,uploadSidoData, uploadData} from '../service/firebase';
+	import SelectCityModal from '../component/modal/city_select.svelte';
+	
+	
+	let map;
+	let sidoData = [];
 
+	let showSelectModal = false;
+
+	onMount(async () => {
+		var mapOptions = {
+			center: new naver.maps.LatLng(37.3595704, 127.105399), //지도의 초기 중심 좌표
+    		zoom: 15,
+		};
+		map = new naver.maps.Map('map', mapOptions);
+		handleResize(map);
+		// Attach resize event listener
+		window.addEventListener('resize', () => handleResize(map));
+	
+		onDestroy(() => {
+			window.removeEventListener('resize', () => handleResize(map));
+		});
+	})
+	function onSearch(latlng){
+		console.log(latlng);
+	}
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+<SelectCityModal bind:isOpen={showSelectModal}></SelectCityModal>
+<button on:click={ () => {showSelectModal=true}}>모달 테스트</button>
 
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+<div style="width: 100%; height:400px;">
+	<div id="map" style="width: 100%; height: 100%;"></div>
+</div>

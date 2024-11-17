@@ -1,0 +1,145 @@
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+  
+    .modal {
+        background: white;
+        width: 90%;
+        max-width: 480px;
+        height: 70vh; /* Set modal height to 50% of the viewport height */
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+        animation: fadeIn 0.3s ease;
+        display: flex; /* Flex container */
+        flex-direction: column; /* Stack children vertically */
+      }
+  
+    .modal-header {
+        display: flex;
+        justify-content: center; /* Center the header title horizontally */
+        align-items: center; /* Center the header title vertically */
+        position: relative; /* Needed for positioning the cancel button */
+        padding: 1rem;
+        background: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+    }
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.modal-header button {
+  position: absolute;
+  right: 1rem; /* Place the button on the right */
+  top: 50%; /* Align vertically with the header */
+  transform: translateY(-50%); /* Adjust to perfectly center vertically */
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+  
+.modal-content {
+    flex: 1; /* Take up remaining space in the modal */
+    padding: 1rem;
+    overflow-y: auto; /* Enable scrolling for overflowing content */
+  }
+    
+  
+    .breadcrumb {
+    display: flex; /* Flexbox for breadcrumb container */
+    gap: 0.5rem; /* Spacing between breadcrumb items */
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.breadcrumb a {
+    padding-left: 8px;
+    padding-right: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.breadcrumb a.empty {
+  color: #f5f5f5; /* Text color for empty data */
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.breadcrumb a.filled {
+  color: #515254; /* Text color for non-empty data */
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+    .city-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        text-align: center;
+        max-height: 400px; 
+        overflow-y: auto; 
+    }
+
+  
+    .city-grid div {
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center; /* Ensures text is centered horizontally */
+        display: flex; /* Enables flexbox for vertical alignment */
+        align-items: center; /* Centers text vertically */
+        justify-content: center; /* Centers text horizontally */
+    }
+  
+    .city-grid div:hover {
+      background: #e8e8e8;
+    }
+    
+    .modal-bottom-button {
+        margin: 1rem;
+        color: white;
+        height: 48px;
+        background-color: var(--main-color);
+        border: none;
+        border-radius: 10px; /* Rounded bottom corners */
+        font-size: 1rem;
+        cursor: pointer;
+        text-align: center;
+      }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
