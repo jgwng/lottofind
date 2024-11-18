@@ -24,12 +24,16 @@
 			window.removeEventListener('resize', () => handleResize(map));
 		});
 	})
-	function onSearch(latlng){
-		console.log(latlng);
+	function onSearchMap(city, address){
+		console.log(city);
+		showSelectModal = false;
+		var newCity = new naver.maps.LatLng(city.centerLat, city.centerLon);
+		map.setCenter(newCity); 
+		map.setZoom(16);
 	}
 </script>
 
-<SelectCityModal bind:isOpen={showSelectModal}></SelectCityModal>
+<SelectCityModal bind:isOpen={showSelectModal} onTapConfirm={onSearchMap}></SelectCityModal>
 <button on:click={ () => {showSelectModal=true}}>모달 테스트</button>
 
 <div style="width: 100%; height:400px;">

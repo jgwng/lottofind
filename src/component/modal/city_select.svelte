@@ -3,11 +3,12 @@
     import {getSidoData} from '../../service/firebase';
     import '../style.css';
     export let isOpen = false;
-    
+    export let onTapConfirm = (city,address) => {};
+
     let currentStep = 0;
     let cities = [];
     let selectCityData = ['','',''];
-    let selectCityCode = ['','',''];
+    let selectCity = [];
     
     let selectLatLng;
     let lastCortarCode;
@@ -84,7 +85,7 @@
         // Reset all elements lower than the given step
         for (let i = step; i < selectCityData.length; i++) {
             selectCityData[i] = '';
-            selectCityCode[i] = '';
+            selectCity[i] = {};
         }
     }
 
@@ -94,26 +95,25 @@
         if(currentStep === 0){
             fetchSidoData("sido/0000000000");
         }else if(currentStep === 1){
-            console.log(lastCortarCode);
-            fetchSidoData(`sido/${lastCortarCode}`);
+            fetchSidoData(`sido/${selectCity[0].code}`);
         }
     }
     
     function onTapCity(city){
         selectCityData[currentStep] = city.name;
-        selectCityCode[currentStep] = city.code;
-        selectLatLng = { 
-				lat:  city.centerLat,
-				 lng: city.centerLon};
+        selectCity[currentStep] = {
+          name: city.name, 
+          code: city.code,
+          centerLat: city.centerLat,
+          centerLon: city.centerLon,
+        };
         if(currentStep === 0){
             fetchSidoData(`sido/${city.code}`);
             lastCortarCode = city.code;
             currentStep = 1;
-            console.log(`sido/${city.code}`);
         }else if(currentStep === 1){
-            fetchSidoData(`sido/${selectCityCode[0]}/region/${city.code}`);
+            fetchSidoData(`sido/${selectCity[0].code}/region/${selectCity[1].code}`);
             currentStep = 2;
-            console.log(`sido/${city.code}`);
         }
     }
   </script>
@@ -150,7 +150,7 @@
                 class="modal-bottom-button"
                 id="modal-bottom-button"
                 disabled={selectCityData.every(item => item === '')}
-                on:click={closeModal}>{selectCityData.join(' ')} 선택
+                on:click={() => onTapConfirm(selectCity[selectCity.length - 1],selectCityData.join(' '))}>{selectCityData.join(' ')} 선택
               </button>
             </div>
           </div>
