@@ -121,3 +121,36 @@ button:focus:not(:focus-visible) {
     z-index: 11;
     transition: background-color 0.3s, bottom 0.3s;
 }
+
+.searchArea {
+	position: fixed;
+	top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Adds spacing between text and image */
+    background-color: white; /* Optional background */
+    border: 1px solid #ccc; /* Optional border */
+    border-radius: 8px; /* Optional rounded corners */
+    padding: 8px 16px; /* Adjust padding for button size */
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+	z-index: 11;
+}
+
+.searchArea .content {
+    display: flex;
+    align-items: center; /* Vertical alignment */
+	justify-content: center;
+	text-align: center;
+	padding-top: 2px;
+    gap: 4px; /* Space between text and image */
+}
+
+.searchArea img {
+    width: 16px;
+    height: 16px;
+	margin-bottom: 3px;
+}
