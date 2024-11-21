@@ -1,6 +1,7 @@
 <script>
 	import { onMount, onDestroy} from 'svelte';
 	import {handleResize, setMarker} from '../service/maputil';
+	import { fade } from 'svelte/transition';
 	import {getSidoData,uploadSidoData, uploadData} from '../service/firebase';
 	import SelectCityModal from '../component/modal/city_select.svelte';
 	import '../resources/app.css';
@@ -12,11 +13,12 @@
 
 	let showSelectModal = false;
 	let initCenter;
+	let showRefreshButton = false;
 
-	onMount(async () => {
-		
+	let dragEndListener;
+
+	onMount(async () => {	
 		let position;
-
 		if (navigator.geolocation) {
 			// Wait for geolocation to resolve using a Promise wrapper
 			position = await getGeolocation();
@@ -24,6 +26,7 @@
 		}else{
 			initCenter = new naver.maps.LatLng(37.3595704, 127.105399);
 		}
+	
 		initializeMap();
 		
 		//렌더링 테스트로 임시로 갯수 설정 확인
@@ -33,7 +36,8 @@
 
 		return ()=>{
 			window.removeEventListener('resize', () => handleResize(map));
-    	}
+			naver.maps.Event.removeListener(dragEndListener);
+		}
 	})
 	
 	function getGeolocation() {
@@ -71,6 +75,9 @@
 		
 		// Attach resize event listener
 		window.addEventListener('resize', () => handleResize(map));
+		dragEndListener = naver.maps.Event.addListener(map, 'dragend', function(e) {
+			showRefreshButton = true;
+		});
 	}
 	
 	function handleFabClick(){
@@ -90,14 +97,22 @@
 	<div id="map" style="width: 100%; height: 100%;"></div>
 </div>
 
+{#if showRefreshButton}
+<button class="refresh" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }} on:click={() => { showRefreshButton = false }}>
+	<div class="content">
+		현 위치에서 검색
+		<img class ="buttonImg" src="./assets/refresh.svg" alt="search" />
+	  </div>
+  </button>
+{/if}
 
-<button
+  <button
   class="searchArea"
   on:click={() => { showSelectModal = true }}
 >
   <div class="content">
     지역검색
-    <img src="./assets/down.svg" alt="search" />
+    <img class ="buttonImg" src="./assets/down.svg" alt="search" />
   </div>
 </button>
 

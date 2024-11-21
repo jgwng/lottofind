@@ -104,8 +104,8 @@ button:focus:not(:focus-visible) {
 /* Floating Button Styling */
 .fab {
     position: fixed;
-	bottom: 20px;
-    right: 20px;
+	bottom: 2rem;
+    right: 2rem;
     width: 56px;
     height: 56px;
     background-color: white;
@@ -140,7 +140,7 @@ button:focus:not(:focus-visible) {
 	z-index: 11;
 }
 
-.searchArea .content {
+.searchArea .content, .refresh .content {
     display: flex;
     align-items: center; /* Vertical alignment */
 	justify-content: center;
@@ -149,8 +149,28 @@ button:focus:not(:focus-visible) {
     gap: 4px; /* Space between text and image */
 }
 
-.searchArea img {
+.buttonImg {
     width: 16px;
     height: 16px;
 	margin-bottom: 3px;
+}
+
+ .refresh {
+    position: fixed;
+    top: 60px; /* Distance from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust to perfectly center */
+    height: 40px;
+    background-color: white;
+    color: #5a2a27;
+    border: none;
+    border-radius: 8px; 
+    padding: 8px 16px;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 11;
 }
