@@ -1,6 +1,6 @@
 <script>
 	import { onMount, onDestroy} from 'svelte';
-	import {handleResize, setMarker} from '../service/maputil';
+	import {handleResize, setMarker, showMarker, hideMarker} from '../service/maputil';
 	import { fade } from 'svelte/transition';
 	import {getSidoData,uploadSidoData, uploadData} from '../service/firebase';
 	import SelectCityModal from '../component/modal/city_select.svelte';
@@ -10,12 +10,13 @@
 	
 	let map;
 	let sidoData = [];
+	let markerList = [];
 
 	let showSelectModal = false;
 	let initCenter;
 	let showRefreshButton = false;
 
-	let dragEndListener;
+	let idleListener;
 
 	onMount(async () => {	
 		let position;
@@ -28,11 +29,8 @@
 		}
 	
 		initializeMap();
-		
-		//렌더링 테스트로 임시로 갯수 설정 확인
-		for(let i = 0;i<100;i++){
-			setMarker(data.lottoMarkets[i],map);
-		}
+
+		updateMarkers(map,markerList);
 
 		return ()=>{
 			window.removeEventListener('resize', () => handleResize(map));
@@ -40,6 +38,23 @@
 		}
 	})
 	
+	function updateMarkers(map, markers) {
+		var mapBounds = map.getBounds();
+		var marker, position;
+
+		for (var i = 0; i < markerList.length; i++) {
+
+			marker = markers[i]
+			position = marker.getPosition();
+
+			if (mapBounds.hasLatLng(position)) {
+				showMarker(map, marker);
+			} else {
+				hideMarker(map, marker);
+			}
+		}
+	}
+
 	function getGeolocation() {
 		return new Promise((resolve, reject) => {
 		navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -62,9 +77,10 @@
 		};
 		map = new naver.maps.Map('map', mapOptions);
 		
+		processMarkersInBackground(data.lottoMarkets, map);
 		
+		//렌더링 테스트로 임시로 갯수 설정 확인
 		handleResize(map);
-		
 		if(initCenter){
 			var position = {
 				lat: initCenter.y,
@@ -75,7 +91,8 @@
 		
 		// Attach resize event listener
 		window.addEventListener('resize', () => handleResize(map));
-		dragEndListener = naver.maps.Event.addListener(map, 'dragend', function(e) {
+
+		idleListener = naver.maps.Event.addListener(map, 'idle', function(e) {
 			showRefreshButton = true;
 		});
 	}
@@ -90,6 +107,39 @@
 		}
 	}
 
+	function refreshShowingMarker(){
+		showRefreshButton = false;
+		updateMarkers(map,markerList);
+	}
+
+	function processMarkersInBackground(markets, map) {
+		let index = 0;
+		const batchSize = 100; // Number of markers processed per batch
+
+		function processBatch() {
+			const end = Math.min(index + batchSize, markets.length);
+			for (let i = index; i < end; i++) {
+				const lottoMarker = setMarker(markets[i], map);
+				naver.maps.Event.addListener(lottoMarker, 'click',  (e) => {
+					var markerPosition =  new naver.maps.LatLng(e.coord.y,e.coord.x);
+					map.panTo(markerPosition,{ duration: 200 });
+					console.log(e);
+				});
+				markerList.push(lottoMarker);
+			}
+
+			index = end;
+
+			if (index < markets.length) {
+				// Continue processing in the next available frame
+				setTimeout(processBatch, 0); // Or use requestAnimationFrame(processBatch);
+			}
+		}
+
+		processBatch(); // Start processing
+	}
+
+
 </script>
 
 <SelectCityModal bind:isOpen={showSelectModal} onTapConfirm={onSearchMap}></SelectCityModal>
@@ -98,7 +148,7 @@
 </div>
 
 {#if showRefreshButton}
-<button class="refresh" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }} on:click={() => { showRefreshButton = false }}>
+<button class="refresh" in:fade={{ duration: 200 }} out:fade={{ duration: 200 }} on:click={refreshShowingMarker}>
 	<div class="content">
 		현 위치에서 검색
 		<img class ="buttonImg" src="./assets/refresh.svg" alt="search" />

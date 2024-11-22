@@ -29,3 +29,16 @@ export function setMarker(position,map){
     });
     return htmlMarker;
 }
+
+
+export function showMarker(map, marker) {
+
+    if (marker.getMap()) return;
+    marker.setMap(map);
+}
+
+export function hideMarker(map, marker) {
+    if (!marker.getMap()) return;
+    marker.setMap(null);
+}
+
