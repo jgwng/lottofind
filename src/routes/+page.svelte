@@ -6,7 +6,8 @@
 	import SelectCityModal from '../component/modal/city_select.svelte';
 	import '../resources/app.css';
 	import '../resources/pin.css';
-	import data from './data.json';
+	import data from '../resources/data.json';
+    import Snackbar from '../component/snackbar/snackbar.svelte';
 	
 	let map;
 	let sidoData = [];
@@ -16,27 +17,46 @@
 	let initCenter;
 	let showRefreshButton = false;
 
+	let isMarkerClick = true;
+	
+	let showSnackbar = false;
+	let snackbarMsg = '';
 	let idleListener;
 
 	onMount(async () => {	
 		let position;
-		if (navigator.geolocation) {
-			// Wait for geolocation to resolve using a Promise wrapper
-			position = await getGeolocation();
-			initCenter = new naver.maps.LatLng(position.coords.latitude,position.coords.longitude);
-		}else{
-			initCenter = new naver.maps.LatLng(37.3595704, 127.105399);
-		}
 	
 		initializeMap();
 
 		updateMarkers(map,markerList);
+		
+		await setCurrentPosition();
 
 		return ()=>{
 			window.removeEventListener('resize', () => handleResize(map));
 			naver.maps.Event.removeListener(dragEndListener);
 		}
 	})
+
+	async function setCurrentPosition(){
+		if (navigator.geolocation) {
+			// Wait for geolocation to resolve using a Promise wrapper
+			let  position = await getGeolocation();
+			initCenter = new naver.maps.LatLng(position.coords.latitude,position.coords.longitude);
+		}else{
+			initCenter = new naver.maps.LatLng(37.3595704, 127.105399);
+		}
+
+		map.setCenter(initCenter);
+		if(initCenter){
+			var latlng = {
+				lat: initCenter.y,
+				lng: initCenter.x
+			}		
+			var htmlMarker = setMarker(latlng,map,'#da1e37');
+		}
+		
+	}
 	
 	function updateMarkers(map, markers) {
 		var mapBounds = map.getBounds();
@@ -57,7 +77,7 @@
 
 	function getGeolocation() {
 		return new Promise((resolve, reject) => {
-		navigator.geolocation.getCurrentPosition(resolve, reject);
+			navigator.geolocation.getCurrentPosition(resolve, reject);
 		});
   	}	
 
@@ -72,7 +92,6 @@
 
 	function initializeMap(){
 		var mapOptions = {
-			center: initCenter, //지도의 초기 중심 좌표
     		zoom: 16,
 		};
 		map = new naver.maps.Map('map', mapOptions);
@@ -81,19 +100,16 @@
 		
 		//렌더링 테스트로 임시로 갯수 설정 확인
 		handleResize(map);
-		if(initCenter){
-			var position = {
-				lat: initCenter.y,
-				lng: initCenter.x
-			}		
-			var htmlMarker = setMarker(position,map);
-		}
 		
 		// Attach resize event listener
 		window.addEventListener('resize', () => handleResize(map));
 
 		idleListener = naver.maps.Event.addListener(map, 'idle', function(e) {
-			showRefreshButton = true;
+			if(isMarkerClick === true){
+				isMarkerClick = false;
+			}else{
+				showRefreshButton = true;
+			}
 		});
 	}
 	
@@ -119,11 +135,11 @@
 		function processBatch() {
 			const end = Math.min(index + batchSize, markets.length);
 			for (let i = index; i < end; i++) {
-				const lottoMarker = setMarker(markets[i], map);
+				const lottoMarker = setMarker(markets[i], map,'#30343f');
 				naver.maps.Event.addListener(lottoMarker, 'click',  (e) => {
 					var markerPosition =  new naver.maps.LatLng(e.coord.y,e.coord.x);
 					map.panTo(markerPosition,{ duration: 200 });
-					console.log(e);
+					copyToClipboard(markets[i].roadAddr);
 				});
 				markerList.push(lottoMarker);
 			}
@@ -135,14 +151,28 @@
 				setTimeout(processBatch, 0); // Or use requestAnimationFrame(processBatch);
 			}
 		}
-
 		processBatch(); // Start processing
 	}
 
+	async function copyToClipboard(msg) {
+        try {
+            await navigator.clipboard.writeText(msg);
+			snackbarMsg = '가게 주소를 복사했습니다!'
+			showSnackbar = true;
+        }
+		catch (err) {
+			snackbarMsg = '가게 주소 복사를 실패했습니다.'
+			showSnackbar = true;
+            console.error('Failed to copy: ', err);
+        }
+    }
 
 </script>
 
 <SelectCityModal bind:isOpen={showSelectModal} onTapConfirm={onSearchMap}></SelectCityModal>
+
+<Snackbar bind:isVisible={showSnackbar} bind:msg={snackbarMsg}></Snackbar>
+
 <div style="width: 100%; height:400px;">
 	<div id="map" style="width: 100%; height: 100%;"></div>
 </div>

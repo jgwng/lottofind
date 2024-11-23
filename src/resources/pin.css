@@ -2,7 +2,7 @@
     width: 24px;
     height: 24px;
     border-radius: 50% 50% 50% 0;
-    background: #5a2a27;
+    background: #30343f;
     position: absolute;
     transform: rotate(-45deg);
     left: 50%;
@@ -15,7 +15,7 @@
     width: 8px;
     height: 8px;
     margin: 8px 0 0 8px;
-    background: #ffedd8;
+    background: #fdfffc;
     position: absolute;
     border-radius: 50%;
   }

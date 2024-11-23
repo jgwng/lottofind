@@ -1,7 +1,7 @@
 <script>
     import { onMount, onDestroy} from 'svelte';
     import {getSidoData} from '../../service/firebase';
-    import '../style.css';
+    import '../../resources/style.css';
     export let isOpen = false;
     export let onTapConfirm = (city,address) => {};
 
