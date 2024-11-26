@@ -29,7 +29,7 @@
 		initializeMap();
 
 		updateMarkers(map,markerList);
-		
+
 		await setCurrentPosition();
 
 		return ()=>{
