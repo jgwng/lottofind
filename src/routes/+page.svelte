@@ -2,7 +2,7 @@
 	import { onMount, onDestroy} from 'svelte';
 	import {handleResize, setMarker, showMarker, hideMarker} from '../service/maputil';
 	import { fade } from 'svelte/transition';
-	import {getSidoData,uploadSidoData, uploadData} from '../service/firebase';
+	import {getSidoData} from '../service/firebase';
 	import SelectCityModal from '../component/modal/city_select.svelte';
 	import '../resources/app.css';
 	import '../resources/pin.css';
@@ -35,8 +35,8 @@
 		return ()=>{
 			window.removeEventListener('resize', () => handleResize(map));
 			naver.maps.Event.removeListener(dragEndListener);
-		}
-	})
+		};
+	});
 
 	async function setCurrentPosition(){
 		if (navigator.geolocation) {
@@ -52,7 +52,7 @@
 			var latlng = {
 				lat: initCenter.y,
 				lng: initCenter.x
-			}		
+			};		
 			var htmlMarker = setMarker(latlng,map,'#da1e37');
 		}
 		
@@ -64,7 +64,7 @@
 
 		for (var i = 0; i < markerList.length; i++) {
 
-			marker = markers[i]
+			marker = markers[i];
 			position = marker.getPosition();
 
 			if (mapBounds.hasLatLng(position)) {
@@ -157,11 +157,11 @@
 	async function copyToClipboard(msg) {
         try {
             await navigator.clipboard.writeText(msg);
-			snackbarMsg = '가게 주소를 복사했습니다!'
+			snackbarMsg = '가게 주소를 복사했습니다!';
 			showSnackbar = true;
         }
 		catch (err) {
-			snackbarMsg = '가게 주소 복사를 실패했습니다.'
+			snackbarMsg = '가게 주소 복사를 실패했습니다.';
 			showSnackbar = true;
             console.error('Failed to copy: ', err);
         }
@@ -188,7 +188,7 @@
 
   <button
   class="searchArea"
-  on:click={() => { showSelectModal = true }}
+  on:click={() => { showSelectModal = true; }}
 >
   <div class="content">
     지역검색

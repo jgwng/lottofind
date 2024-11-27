@@ -12,17 +12,17 @@ const db = admin.firestore();
 
 exports.updateLottoData = onSchedule(
     {
-        schedule: "every 5 minutes",
-        timeZone: "Asia/Seoul", // Use the Asia/Seoul timezone
+        schedule: "5 21 * * 6", // 9:05 PM every Saturday
+        timeZone: "Asia/Seoul", // Korea Standard Time
     },
     async (event) => {
         try {
-            const docRef = db.collection("lottoInfo").doc('drwNoInfo'); // Replace 'users' with your Firestore collection name
+            const docRef = db.collection("lottoInfo").doc("drwNoInfo"); // Firestore document reference
             const doc = await docRef.get();
 
             if (!doc.exists) {
-                console.error(`No document found for user ID: drwNoInfo`);
-                return res.status(404).send("Document not found");
+                console.error(`No document found for ID: drwNoInfo`);
+                return;
             }
 
             // Get the current drwNo from the document
@@ -30,7 +30,8 @@ exports.updateLottoData = onSchedule(
             const currentDrwNo = data.drwNo;
 
             if (!currentDrwNo) {
-                return res.status(400).send("drwNo is missing in the document");
+                console.error("drwNo is missing in the document");
+                return;
             }
 
             // Fetch lotto data from external API
@@ -53,7 +54,8 @@ exports.updateLottoData = onSchedule(
             const { drwNo } = lottoData;
 
             if (!drwNo) {
-                return res.status(400).send("drwNo is missing in the lotto data");
+                console.error("drwNo is missing in the lotto data");
+                return;
             }
 
             console.log(`Using drwNo (${drwNo}) as the document ID`);
@@ -64,20 +66,14 @@ exports.updateLottoData = onSchedule(
                 ...lottoData,
             });
 
-            // Optionally, update the user's document with the next draw number
+            // Update the main document with the next draw number
             await docRef.update({
                 drwNo: drwNo + 1, // Increment drwNo
             });
 
-            res.status(200).send({
-                message: `Lotto data saved successfully with document ID: ${drwNo}`,
-                savedData: {
-                    ...lottoData,
-                },
-            });
+            console.log(`Lotto data saved successfully with document ID: ${drwNo}`);
         } catch (error) {
-            console.error("Error processing request:", error);
-            res.status(500).send("Internal Server Error");
+            console.error("Error in updateLottoData function:", error);
         }
     }
 );
