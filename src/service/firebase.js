@@ -39,7 +39,11 @@ export async function getSidoData(directory, isSeveral) {
   }
 }
 
+export async function getRecentDrwNo() {
+  return await getDoc(doc(db, 'lottoInfo/drwNoInfo'));
+}
+
+export async function getLottoDrawNo(drwNo) {
+  return await getDoc(doc(db, `lottoInfo/${drwNo}`));
+}
 export { db };
-
-
-

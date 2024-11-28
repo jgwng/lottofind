@@ -20,9 +20,10 @@
     const closeModal = () => {
       isOpen = false;
     };
+    
     onMount(async () => {
         fetchSidoData("sido/0000000000",);
-	})
+	  });
 
     async function fetchSidoData(directory) {
         try {
@@ -147,7 +148,7 @@
                 </div>
               </div>
               <button 
-                class="modal-bottom-button"
+                class="wbottom-button"
                 id="modal-bottom-button"
                 disabled={selectCityData.every(item => item === '')}
                 on:click={() => onTapConfirm(selectCity[selectCity.length - 1],selectCityData.join(' '))}>{selectCityData.join(' ')} 선택

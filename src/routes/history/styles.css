@@ -1,0 +1,79 @@
+.window{
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.lottery-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #D64B4B;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .number-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .plus-sign {
+    font-size: 24px;
+    font-weight: bold;
+    color: #888;
+  }
+
+  .lottoBonusBall{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 500;
+    background-color: #aaa; /* Default color */
+  }
+
+  .lottoBall {
+    display: inline-flex; /* Center the text using flexbox */
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content */
+    border-radius: 100%;
+    text-align: center;
+    color: #fff;
+    font-weight: 500;
+}
+    .lottoBall.lrg {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+    }
+
+/* Specific styles for number ranges */
+    .lottoBall.ball1 {background: #FBC400; text-shadow: 0px 0px 3px rgba(73, 57, 0, .8);} /* 1 ~ 10 */
+    .lottoBall.ball2 {background: #69c8f2; text-shadow: 0px 0px 3px rgba(0, 59, 112, .8);} /* 11 ~ 20 */
+    .lottoBall.ball3 {background: #ff7272; text-shadow: 0px 0px 3px rgba(112, 0, 0, .8);} /* 21 ~ 30 */
+    .lottoBall.ball4 {background: #aaa; text-shadow: 0px 0px 3px rgba(51, 51, 51, .8);} /* 31 ~ 40 */
+    .lottoBall.ball5 {background: #b0d840; text-shadow: 0px 0px 3px rgba(43, 73, 0, .8);} /* 41 ~ 45 */
+
+.button-container{
+    display: flex;
+	flex-direction: row;
+}
