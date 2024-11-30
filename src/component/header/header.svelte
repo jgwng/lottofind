@@ -1,7 +1,7 @@
 <script>
     // Logo link and button URLs
     const logoLink = "/";
-    const mapLink = "/map";
+    const mapLink = "/";
     const historyLink = "/history";
 </script>
 
