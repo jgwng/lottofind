@@ -1,8 +1,8 @@
 function getMapSize() {
     const width = window.innerWidth;
-    const height = window.innerHeight;
+    const height = window.innerHeight - 60;
     return new naver.maps.Size(width, height);
-  }
+}
 
 
 export function handleResize(map) {
@@ -14,7 +14,7 @@ export function handleResize(map) {
 
 export function setMarker(position, map, pinColor = '#30343f') { // Default color
     var position = new naver.maps.LatLng(position.lat, position.lng);
-    
+
     var htmlMarker = new naver.maps.Marker({
         position: position,
         map: map,

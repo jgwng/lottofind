@@ -1,7 +1,8 @@
 <script>
   import './styles.css';
   import { onMount, onDestroy} from 'svelte';
-  import {getRecentDrwNo, getLottoDrawNo} from '../../service/firebase';  
+  import {getRecentDrwNo, getLottoDrawNo} from '../../service/firebase';
+  import Loader from '../../component/loader/loader.svelte';  
   
   let lastDrwNo = 0;
   let currentDrwNo = 0;
@@ -66,25 +67,26 @@
 </script>
 
 <div class="window">
-    <div class="lottery-container">
-    {#if lottoNoResult.length >0} 
-        <div class="title">{lotteryData.drwNo}회 당첨결과</div>
-        <div class="subtitle">({formatDate(lotteryData.drwNoDate)} 추첨)</div>
-
-        <div class="number-container">
-            {#each lottoNoResult as number}
-            <div class="lottoBall lrg {getClassName(number)}">{number}</div>
-            {/each}
-            <div class="plus-sign">+</div>
-            <div class="lottoBonusBall {getClassName(lotteryData.bnusNo)}">{lotteryData.bnusNo}</div>
-        </div>
+    {#if lottoNoResult.length === 0}    
+        <Loader></Loader>
     {:else}
-        <div class="title">{lotteryData.drwNo}회 당첨결과</div>
-    {/if}
-    </div>
-    <div class='button-container'>
-        <button class="bottom-button" style=" width: 56px;" on:click={() => onFetchLottoDrawData(false)}>이전 회차</button>
-        <button class="bottom-button" style=" width: 56px;" on:click={() => onFetchLottoDrawData(true)}>다음 회차</button>
-    </div>
+        <div class="lottery-container">
+            <div class="title">{lotteryData.drwNo}회 당첨결과</div>
+            <div class="subtitle">({formatDate(lotteryData.drwNoDate)} 추첨)</div>
+
+            <div class="number-container">
+                {#each lottoNoResult as number}
+                <div class="lottoBall lrg {getClassName(number)}">{number}</div>
+                {/each}
+                <div class="plus-sign">+</div>
+                <div class="lottoBonusBall {getClassName(lotteryData.bnusNo)}">{lotteryData.bnusNo}</div>
+            </div>    
+        </div>
+        <div class='button-container'>
+            <button class="bottom-button" style=" width: 112px;" on:click={() => onFetchLottoDrawData(false)}>이전 회차</button>
+            <button class="bottom-button" style=" width: 112px;" on:click={() => onFetchLottoDrawData(true)}>다음 회차</button>
+        </div>
+    {/if}    
+   
    
 </div>
