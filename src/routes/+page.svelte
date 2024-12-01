@@ -1,12 +1,13 @@
 <script>
 	import { onMount, onDestroy} from 'svelte';
-	import {handleResize, setMarker, showMarker, hideMarker} from '../service/maputil';
+	import {handleResize, setMarker, showMarker, hideMarker} from '../service/map';
 	import { fade } from 'svelte/transition';
 	import {getSidoData} from '../service/firebase';
 	import SelectCityModal from '../component/modal/city_select.svelte';
 	import '../resources/app.css';
 	import '../resources/pin.css';
 	import data from '../resources/data.json';
+	import {isMobileDevice} from '../service/device';
     import Snackbar from '../component/snackbar/snackbar.svelte';
 	
 	let map;
@@ -136,11 +137,39 @@
 			const end = Math.min(index + batchSize, markets.length);
 			for (let i = index; i < end; i++) {
 				const lottoMarker = setMarker(markets[i], map,'#30343f');
+				var contentString = `
+            		<div style="width:150px;text-align:center;padding:10px; background-color:var(--info-color); border-radius:20px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+                		<div>${markets[i].storeName}</div>
+            		</div>
+            	`;
+				
+				const infowindow = new naver.maps.InfoWindow({
+                        content: contentString,
+                        borderWidth: 0,
+                        pixelOffset: new naver.maps.Point(-25, -25),
+                        disableAnchor: true,
+                        backgroundColor: 'transparent',
+                    });
+				
 				naver.maps.Event.addListener(lottoMarker, 'click',  (e) => {
 					var markerPosition =  new naver.maps.LatLng(e.coord.y,e.coord.x);
 					map.panTo(markerPosition,{ duration: 200 });
 					copyToClipboard(markets[i].roadAddr);
 				});
+
+				if(isMobileDevice() === false){
+					// 마커에 마우스 오버 이벤트 추가
+					naver.maps.Event.addListener(lottoMarker, 'mouseover', function() {
+						console.log('mouseover');
+						infowindow.open(map, lottoMarker);
+					});
+
+					// 마커에 마우스 아웃 이벤트 추가
+					naver.maps.Event.addListener(lottoMarker, 'mouseout', function() {
+						console.log('mouseout');
+						infowindow.close();
+					});
+				}
 				markerList.push(lottoMarker);
 			}
 

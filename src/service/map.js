@@ -18,7 +18,7 @@ export function setMarker(position, map, pinColor = '#30343f') { // Default colo
     var htmlMarker = new naver.maps.Marker({
         position: position,
         map: map,
-        title: 'htmlMarker',
+        title: '',
         icon: {
             content: [
                 `<div class="pin" style="background: ${pinColor};"></div>`,

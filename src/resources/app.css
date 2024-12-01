@@ -152,4 +152,13 @@ button:focus:not(:focus-visible) {
     cursor: pointer;
     z-index: 11;
 }
-
+.infoWindow{
+    width:150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align:center;
+    background-color:var(--info-color);
+    border-radius:20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
