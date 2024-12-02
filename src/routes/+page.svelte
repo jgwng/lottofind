@@ -9,7 +9,9 @@
 	import data from '../resources/data.json';
 	import {isMobileDevice} from '../service/device';
     import Snackbar from '../component/snackbar/snackbar.svelte';
-	
+	import MobileNotice from '../component/modal/mobile_notice.svelte';
+	import {getTodayDate} from '../service/common';
+
 	let map;
 	let sidoData = [];
 	let markerList = [];
@@ -21,12 +23,20 @@
 	let isMarkerClick = true;
 	
 	let showSnackbar = false;
+	let showMobileNotice = true;
 	let snackbarMsg = '';
 	let idleListener;
 
 	onMount(async () => {	
 		let position;
-	
+		const today = getTodayDate();
+        const lastSeenDate = localStorage.getItem('modalLastSeen');
+
+        if (lastSeenDate !== today && isMobileDevice) {
+            showMobileNotice = true; // Show the modal if it hasn't been seen today
+        }else{
+			showMobileNotice = false;
+		}
 		initializeMap();
 
 		updateMarkers(map,markerList);
@@ -195,9 +205,11 @@
             console.error('Failed to copy: ', err);
         }
     }
+	
 
 </script>
 
+<MobileNotice bind:showModal={showMobileNotice}></MobileNotice>
 <SelectCityModal bind:isOpen={showSelectModal} onTapConfirm={onSearchMap}></SelectCityModal>
 
 <Snackbar bind:isVisible={showSnackbar} bind:msg={snackbarMsg}></Snackbar>
