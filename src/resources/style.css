@@ -29,7 +29,7 @@
         display: flex;
         justify-content: center; /* Center the header title horizontally */
         align-items: center; /* Center the header title vertically */
-        positiwon: relative; /* Needed for positioning the cancel button */
+        position: relative; /* Needed for positioning the cancel button */
         padding: 1rem;
         background: #f5f5f5;
         border-bottom: 1px solid #ddd;
@@ -121,7 +121,43 @@
       background: #e8e8e8;
     }
     
-    
+    .mobile-modal {
+        background-color: #1a1a1a; /* Dark gray */
+        color: white;
+        border-radius: 10px;
+        text-align: center;
+        width: 80%;
+        max-width: 400px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-modal p {
+        padding-top: 16px;
+        padding-bottom: 8px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .mobile-modal button {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        font-size: 16px;
+        color: #007BFF; /* Blue text for button */
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .mobile-modal button:hover {
+        text-decoration: underline;
+    }
+
+    .divider {
+        width: 100%;
+        height: 1px;
+        background-color: rgb(55, 54, 55); /* Divider color */
+       
+    }
 
     @keyframes fadeIn {
       from {

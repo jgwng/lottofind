@@ -117,6 +117,11 @@
             currentStep = 2;
         }
     }
+
+    function onConfirmSelectCity(){
+      isOpen = false;
+      onTapConfirm(selectCity[selectCity.length - 1],selectCityData.join(' '));
+    }
   </script>
 
   
@@ -148,10 +153,10 @@
                 </div>
               </div>
               <button 
-                class="wbottom-button"
+                class="bottom-button"
                 id="modal-bottom-button"
                 disabled={selectCityData.every(item => item === '')}
-                on:click={() => onTapConfirm(selectCity[selectCity.length - 1],selectCityData.join(' '))}>{selectCityData.join(' ')} 선택
+                on:click={onConfirmSelectCity}>{selectCityData.join(' ')} 선택
               </button>
             </div>
           </div>

@@ -10,7 +10,8 @@
 	import {isMobileDevice} from '../service/device';
     import Snackbar from '../component/snackbar/snackbar.svelte';
 	import MobileNotice from '../component/modal/mobile_notice.svelte';
-	import {getTodayDate} from '../service/common';
+	import {getTodayDate, create} from '../service/common';
+
 
 	let map;
 	let sidoData = [];
@@ -23,7 +24,6 @@
 	let isMarkerClick = true;
 	
 	let showSnackbar = false;
-	let showMobileNotice = true;
 	let snackbarMsg = '';
 	let idleListener;
 
@@ -33,10 +33,12 @@
         const lastSeenDate = localStorage.getItem('modalLastSeen');
 
         if (lastSeenDate !== today && isMobileDevice) {
-            showMobileNotice = true; // Show the modal if it hasn't been seen today
-        }else{
-			showMobileNotice = false;
-		}
+            create(
+				MobileNotice,
+				document.querySelector('#modal'),
+			);
+        }
+
 		initializeMap();
 
 		updateMarkers(map,markerList);
@@ -94,11 +96,11 @@
 
 
 	function onSearchMap(city, address){
-		console.log(city);
 		showSelectModal = false;
 		var newCity = new naver.maps.LatLng(city.centerLat, city.centerLon);
 		map.setCenter(newCity); 
 		map.setZoom(16);
+		showRefreshButton = true;
 	}
 
 	function initializeMap(){
@@ -205,12 +207,21 @@
             console.error('Failed to copy: ', err);
         }
     }
-	
 
+	function onTapSearchArea(){
+		create(
+			SelectCityModal,
+			document.querySelector('#modal'),
+			{ 
+				isOpen: true,
+				onTapConfirm: onSearchMap
+			}
+    	);
+	}
+	
 </script>
 
-<MobileNotice bind:showModal={showMobileNotice}></MobileNotice>
-<SelectCityModal bind:isOpen={showSelectModal} onTapConfirm={onSearchMap}></SelectCityModal>
+<div id="modal"></div>
 
 <Snackbar bind:isVisible={showSnackbar} bind:msg={snackbarMsg}></Snackbar>
 
@@ -229,7 +240,7 @@
 
   <button
   class="searchArea"
-  on:click={() => { showSelectModal = true; }}
+  on:click={onTapSearchArea}
 >
   <div class="content">
     지역검색
