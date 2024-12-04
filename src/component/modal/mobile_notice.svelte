@@ -4,8 +4,8 @@
     export let showModal = true;
 
     function closeModal() {
-        const today = getTodayDate();
-        localStorage.setItem('modalLastSeen', today); // Save today's date
+        // const today = getTodayDate();
+        // localStorage.setItem('modalLastSeen', today); // Save today's date
         showModal = false; // Hide the modal
     }
 </script>

@@ -10,7 +10,7 @@
 	import {isMobileDevice} from '../service/device';
     import Snackbar from '../component/snackbar/snackbar.svelte';
 	import MobileNotice from '../component/modal/mobile_notice.svelte';
-	import {getTodayDate, create} from '../service/common';
+	import {getTodayDate, create, openBottomSheet, getLocalToday} from '../service/common';
 
 
 	let map;
@@ -29,18 +29,8 @@
 
 	onMount(async () => {	
 		let position;
-		const today = getTodayDate();
-        const lastSeenDate = localStorage.getItem('modalLastSeen');
-
-        if (lastSeenDate !== today && isMobileDevice) {
-            create(
-				MobileNotice,
-				document.querySelector('#modal'),
-			);
-        }
-
+		checkShowModal();
 		initializeMap();
-
 		updateMarkers(map,markerList);
 
 		await setCurrentPosition();
@@ -50,7 +40,20 @@
 			naver.maps.Event.removeListener(dragEndListener);
 		};
 	});
+	
+	function checkShowModal(){
+		if(isMobileDevice() === false) return;
 
+		const today = getLocalToday();
+    	const lastSeenDate = localStorage.getItem('modalLastSeen'); 
+		if (lastSeenDate !== today) {
+			create(
+				MobileNotice,
+				document.querySelector('#modal'),
+			);
+			localStorage.setItem('modalLastSeen', today);
+		}
+	}
 	async function setCurrentPosition(){
 		if (navigator.geolocation) {
 			// Wait for geolocation to resolve using a Promise wrapper
@@ -68,9 +71,11 @@
 			};		
 			var htmlMarker = setMarker(latlng,map,'#da1e37');
 		}
-		
 	}
 	
+	
+
+
 	function updateMarkers(map, markers) {
 		var mapBounds = map.getBounds();
 		var marker, position;
@@ -150,15 +155,15 @@
 			for (let i = index; i < end; i++) {
 				const lottoMarker = setMarker(markets[i], map,'#30343f');
 				var contentString = `
-            		<div style="width:150px;text-align:center;padding:10px; background-color:var(--info-color); border-radius:20px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
-                		<div>${markets[i].storeName}</div>
+            		<div class="infoWindow">
+                		<div class="infoWindow-text">${markets[i].storeName}</div>
             		</div>
             	`;
 				
 				const infowindow = new naver.maps.InfoWindow({
                         content: contentString,
                         borderWidth: 0,
-                        pixelOffset: new naver.maps.Point(-25, -25),
+                        pixelOffset: new naver.maps.Point(-27, -35),
                         disableAnchor: true,
                         backgroundColor: 'transparent',
                     });
@@ -199,11 +204,25 @@
         try {
             await navigator.clipboard.writeText(msg);
 			snackbarMsg = '가게 주소를 복사했습니다!';
-			showSnackbar = true;
+			create(
+				Snackbar,
+				document.querySelector('#snackbar'),
+				{ 
+					isVisible: true,
+					msg: snackbarMsg
+				}
+    		);
         }
 		catch (err) {
 			snackbarMsg = '가게 주소 복사를 실패했습니다.';
-			showSnackbar = true;
+			create(
+				Snackbar,
+				document.querySelector('#snackbar'),
+				{ 
+					isVisible: true,
+					msg: snackbarMsg
+				}
+    		);
             console.error('Failed to copy: ', err);
         }
     }
@@ -219,11 +238,10 @@
     	);
 	}
 	
+	// function onTapShowBottomSheet(){
+	// 	openBottomSheet(ImageSelect,{},'title,title');
+	// }
 </script>
-
-<div id="modal"></div>
-
-<Snackbar bind:isVisible={showSnackbar} bind:msg={snackbarMsg}></Snackbar>
 
 <div style="width: 100%; height:400px;">
 	<div id="map" style="width: 100%; height: 100%;"></div>
