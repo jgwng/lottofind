@@ -38,19 +38,30 @@ export function isRedirectedFromAPP() {
 }
 
 export function openBottomSheet(Component, props, title) {
-    const bottomSheet = document.querySelector('#bottom-sheet');
+    let bottomSheet = document.querySelector('#bottom-sheet');
+
     if (!bottomSheet) {
-        const container = document.createElement('div');
-        container.id = 'bottom-sheet';
-        document.body.appendChild(container);
+        bottomSheet = document.createElement('div');
+        bottomSheet.id = 'bottom-sheet';
+        document.body.appendChild(bottomSheet);
     }
 
-    var result = create(BottomSheet, document.querySelector('#bottom-sheet'), {
+    // Mount BottomSheet with initial visibility
+    const bottomSheetInstance = create(BottomSheet, bottomSheet, {
         visible: true,
-        onClose: hideBottomSheet,
+        onClose: () => {
+            // Add a delay to allow the animation to complete
+            setTimeout(() => {
+                bottomSheet.remove();
+            }, 300); // Match animation duration
+        },
         title: title,
     });
-    mount(Component, { target: document.querySelector('#content'), props });
+
+    const contentTarget = bottomSheet.querySelector('#content');
+    mount(Component, { target: contentTarget, props });
+
+    return bottomSheetInstance;
 }
 
 
