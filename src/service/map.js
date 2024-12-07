@@ -33,7 +33,6 @@ export function setMarker(position, map, pinColor = '#30343f') { // Default colo
 
 
 export function showMarker(map, marker) {
-
     if (marker.getMap()) return;
     marker.setMap(map);
 }
@@ -41,5 +40,20 @@ export function showMarker(map, marker) {
 export function hideMarker(map, marker) {
     if (!marker.getMap()) return;
     marker.setMap(null);
+}
+
+export function setInitCenter() {
+    let initCenter = {};
+    const storedLatLng = localStorage.getItem("lastLatLng");
+    if (storedLatLng) {
+        console.log(storedLatLng)
+        initCenter = JSON.parse(storedLatLng);
+    } else {
+        initCenter = {
+            lat: 37.5666103,
+            lng: 126.9783882
+        };
+    }
+    return initCenter;
 }
 

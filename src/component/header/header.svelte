@@ -7,14 +7,18 @@
 
 <style>
     header {
+        width: 100vw; /* Make header span the full width of the viewport */
+        max-width: 100%; /* Ensure it doesn't exceed the window width */
+        box-sizing: border-box; /* Include padding in the total width */
         display: flex;
         align-items: center;
         justify-content: space-between;
         height: 60px;
         padding: 0 20px;
-        background-color: #f9f9f9; /* Light background color */
-        border-bottom: 1px solid #ddd; /* Optional border */
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #ddd;
     }
+
 
     .button-group {
         display: flex;

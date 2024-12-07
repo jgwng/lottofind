@@ -37,8 +37,8 @@
         position: fixed;
         bottom: 0;
         left: 0;
-        width: 100vw;
-        max-width: 100vw;
+        width: 100%;
+      
         background-color: #2c2c2e;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
