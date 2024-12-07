@@ -35,7 +35,6 @@
 
 	onMount(async () => {	
 		checkShowModal();
-		await setCurrentPosition();
 		initializeMap();
 		return ()=>{
 			window.removeEventListener('resize', () => handleResize(map));
@@ -57,46 +56,16 @@
 		}
 	}
 
-	async function setCurrentPosition() {
-		try {
-			if (navigator.geolocation) {
-				// Use a Promise wrapper to handle geolocation
-				const position = await new Promise((resolve, reject) => {
-					navigator.geolocation.getCurrentPosition(resolve, reject, {
-						enableHighAccuracy: true,
-						timeout: 500, // Set a timeout for geolocation
-					});
-				});
-
-				// Set the initial center based on the user's location
-				initCenter = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			} else {
-				let lastCenter = setInitCenter();
-				initCenter = new naver.maps.LatLng(
-					lastCenter.lat,
-					lastCenter.lng
-				);
-			}
-		} catch (error) {
-			let lastCenter = setInitCenter();
-			console.log('lastCenter : ', lastCenter);
-			initCenter = new naver.maps.LatLng(
-					lastCenter.lat,
-					lastCenter.lng
-			);
-		}
-	}
-
 	function initializeMap(){
-		let w = window.innerWidth;
-    	let h = window.innerHeight;
-
+		let lastCenter = setInitCenter();
+		initCenter = new naver.maps.LatLng(
+					lastCenter.lat,
+					lastCenter.lng
+		);
 		var mapOptions = {
 			center: initCenter,
-			size : new naver.maps.Size(w,h-60),
     		zoom: 16,
 		};
-
 		map = new naver.maps.Map('map', mapOptions);
 		
 		if(navigator.geolocation){
@@ -106,9 +75,7 @@
 			};		
 			var htmlMarker = setMarker(latlng,map,'#da1e37');
 		}
-		processMarkersInBackground(data.lottoMarkets, map).then(() => {
-			updateMarkers(map,markerList);
-		});
+		processMarkersInBackground(data.lottoMarkets, map);
 		
 		//렌더링 테스트로 임시로 갯수 설정 확인
 		handleResize(map);
@@ -117,16 +84,14 @@
 		window.addEventListener('resize', () => handleResize(map));
 
 		idleListener = naver.maps.Event.addListener(map, 'idle', function(e) {
-			centerLatlng = { 
-				lat:  map.getCenter().y,
-				 lng: map.getCenter().x };
-			console.log('centerLatlng : ', centerLatlng);
-			
 			if(isMarkerClick === true){
 				isMarkerClick = false;
 			}else{
 				showRefreshButton = true;
 			}
+			centerLatlng = { 
+				lat:  map.getCenter().y,
+				 lng: map.getCenter().x };
 		});
 	}
 
@@ -136,29 +101,32 @@
 		}
 	}
 
-
-
-	function updateMarkers(map, markers) {
+	function updateMarkers(map, markers,isInit) {
 		var mapBounds = map.getBounds();
 		var marker, position;
 		currentMarkerList = [];
-		console.log(mapBounds);
+		let dataList = [];
+		
 		for (var i = 0; i < markerList.length; i++) {
 
 			marker = markers[i];
 			position = marker.getPosition();
-
+			console.log('position : ', position);
 			if (mapBounds.hasLatLng(position)) {
 				showMarker(map, marker);
 				currentMarkerList.push(marker);
+				data.lottoMarkets[i].marker = marker;
+				dataList.push(data.lottoMarkets[i]);
 			} else {
 				hideMarker(map, marker);
 			}
 		}
-		console.log(currentMarkerList);
-		// openBottomSheet(CurrentMarkerList,{
-		// 	markets: currentMarkerList
-		// },'title,title');
+		console.log(dataList);
+		if(dataList.length > 0 && isInit !== true){
+			openBottomSheet(CurrentMarkerList,{
+				markets: dataList
+			},'지도 내의 복권 판매점 목록');
+		}
 	}
 
 	function getGeolocation() {
@@ -189,7 +157,7 @@
 
 	function refreshShowingMarker(){
 		showRefreshButton = false;
-		updateMarkers(map,markerList);
+		updateMarkers(map,markerList,false);
 	}
 
 	function processMarkersInBackground(markets, map) {
@@ -199,41 +167,49 @@
 
 			function processBatch() {
 				const end = Math.min(index + batchSize, markets.length);
+				const bounds = map.getBounds();
 				for (let i = index; i < end; i++) {
-					const lottoMarker = setMarker(markets[i], map, '#30343f');
-					var contentString = `
-						<div class="infoWindow">
-							<div class="infoWindow-text">${markets[i].storeName}</div>
-						</div>
-					`;
+					var position = new naver.maps.LatLng(markets[i].lat, markets[i].lng);
+					let isInBoundary = bounds.hasLatLng(position);
+					console.log('isInBoundary : ', isInBoundary);
+					if(isInBoundary === true){
+						const lottoMarker = setMarker(markets[i], map, '#30343f');
+						var contentString = `
+							<div class="infoWindow">
+								<div class="infoWindow-text">${markets[i].storeName}</div>
+							</div>
+						`;
 
-					const infowindow = new naver.maps.InfoWindow({
-						content: contentString,
-						borderWidth: 0,
-						pixelOffset: new naver.maps.Point(-27, -35),
-						disableAnchor: true,
-						backgroundColor: 'transparent',
-					});
-
-					naver.maps.Event.addListener(lottoMarker, 'click', (e) => {
-						var markerPosition = new naver.maps.LatLng(e.coord.y, e.coord.x);
-						map.panTo(markerPosition, { duration: 200 });
-						console.log(markets[i]);
-						copyToClipboard(markets[i].roadAddr);
-					});
-
-					if (isMobileDevice() === false) {
-						naver.maps.Event.addListener(lottoMarker, 'mouseover', function() {
-							console.log('mouseover');
-							infowindow.open(map, lottoMarker);
+						const infowindow = new naver.maps.InfoWindow({
+							content: contentString,
+							borderWidth: 0,
+							pixelOffset: new naver.maps.Point(-27, -35),
+							disableAnchor: true,
+							backgroundColor: 'transparent',
 						});
 
-						naver.maps.Event.addListener(lottoMarker, 'mouseout', function() {
-							console.log('mouseout');
-							infowindow.close();
+						naver.maps.Event.addListener(lottoMarker, 'click', (e) => {
+							var markerPosition = new naver.maps.LatLng(e.coord.y, e.coord.x);
+							map.panTo(markerPosition, { duration: 200 });
+							console.log(markets[i]);
+							copyToClipboard(markets[i].roadAddr);
 						});
+
+						if (isMobileDevice() === false) {
+							naver.maps.Event.addListener(lottoMarker, 'mouseover', function() {
+								console.log('mouseover');
+								infowindow.open(map, lottoMarker);
+							});
+
+							naver.maps.Event.addListener(lottoMarker, 'mouseout', function() {
+								console.log('mouseout');
+								infowindow.close();
+							});
+						}
+						showMarker(map, lottoMarker);
+						markerList.push(lottoMarker);
 					}
-					markerList.push(lottoMarker);
+					console.log(markerList);
 				}
 
 				index = end;
@@ -286,10 +262,6 @@
 			}
     	);
 	}
-	
-	// function onTapShowBottomSheet(){
-	// 	openBottomSheet(ImageSelect,{},'title,title');
-	// }
 </script>
 
 <div style="width: 100%; height:400px;">

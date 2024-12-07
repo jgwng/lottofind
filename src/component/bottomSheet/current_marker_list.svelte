@@ -26,14 +26,22 @@
         font-weight:500;
         color: white;
     }
+    
+    ul {
+        max-height: 400px; /* Set the maximum height for the list */
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding: 0; /* Remove default padding */
+        margin: 0; /* Remove default margin */
+        list-style: none; /* Remove default list styling */
+    }
 </style>
 
 <ul>
         {#each markets as market}
            <div class="header">
                 <div>
-                    <div class="header-title">{market.name ?? '테스트'}</div>
-                    <div class="header-address">{market.address ?? '테스트'}</div>
+                    <div class="header-title">{market.storeName ?? '테스트'}</div>
+                    <div class="header-address">{market.roadAddr ?? '테스트'}</div>
                 </div>
         </div>
         {/each}

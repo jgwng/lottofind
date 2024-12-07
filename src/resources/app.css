@@ -102,7 +102,7 @@ button:focus:not(:focus-visible) {
 
 .searchArea {
 	position: fixed;
-	top: 76px;
+	top: 16px;
     left: 16px;
     display: flex;
     align-items: center;
@@ -135,7 +135,7 @@ button:focus:not(:focus-visible) {
 
  .refresh {
     position: fixed;
-    top: 120px; /* Distance from the top */
+    top: 60px; /* Distance from the top */
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Adjust to perfectly center */
     height: 40px;

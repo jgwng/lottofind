@@ -56,6 +56,26 @@
         visibility: visible;
         opacity: 1;
     }
+    .bottom-sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #333;
+      flex-shrink: 0; /* Prevents the header from shrinking or scrolling */
+    }
+
+    .bottom-sheet-header-title {
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  
+    .bottom-sheet-header-close {
+      font-size: 18px;
+      color: white; /* iOS-style blue */
+      cursor: pointer;
+    }
 </style>
 
 <div class="overlay" class:active={visible} on:click={handleBackgroundClick}></div>
@@ -63,9 +83,9 @@
 <!-- Use Svelte's transition directive -->
 <div class="popup-container" transition:slide={{ duration: 300 }} class:open={visible}>
     <!-- Header with title and close button -->
-    <div class="header">
-        <span class="header-title">{title}</span>
-        <span class="header-close" on:click={onClose}>✖</span>
+    <div class="bottom-sheet-header">
+        <span class="bottom-sheet-header-title">{title}</span>
+        <span class="bottom-sheet-header-close" on:click={onClose}>✖</span>
     </div>
 
     <!-- Content Area -->
