@@ -50,14 +50,12 @@ export function openBottomSheet(Component, props, title) {
     const bottomSheetInstance = create(BottomSheet, bottomSheet, {
         visible: true,
         onClose: () => {
-            // Add a delay to allow the animation to complete
-            setTimeout(() => {
-                bottomSheet.remove();
-            }, 300); // Match animation duration
+            hideBottomSheet();
         },
         title: title,
     });
 
+    // Mount the provided component inside the BottomSheet content area
     const contentTarget = bottomSheet.querySelector('#content');
     mount(Component, { target: contentTarget, props });
 
@@ -69,6 +67,10 @@ export function openBottomSheet(Component, props, title) {
 function hideBottomSheet() {
     const container = document.querySelector('#bottom-sheet');
     if (container) {
-        container.remove(); // Cleanup the DOM
+        setTimeout(() => {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+        }, 300); // Match animation duration
     }
 }

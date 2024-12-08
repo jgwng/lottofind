@@ -17,7 +17,7 @@
 	let map;
 	let sidoData = [];
 	let markerList = [];
-	let currentMarkerList = [];
+	let markerDataList = [];
 	let initCenter;
 
 	let showSelectModal = false;
@@ -101,32 +101,21 @@
 		}
 	}
 
-	function updateMarkers(map, markers,isInit) {
-		var mapBounds = map.getBounds();
-		var marker, position;
-		currentMarkerList = [];
-		let dataList = [];
-		
-		for (var i = 0; i < markerList.length; i++) {
-
-			marker = markers[i];
-			position = marker.getPosition();
-			console.log('position : ', position);
-			if (mapBounds.hasLatLng(position)) {
-				showMarker(map, marker);
-				currentMarkerList.push(marker);
-				data.lottoMarkets[i].marker = marker;
-				dataList.push(data.lottoMarkets[i]);
-			} else {
-				hideMarker(map, marker);
-			}
+	function updateMarkers(map) {
+		for(var i = 0; i<markerList.length;i++){
+			hideMarker(map, markerList[i]);
 		}
-		console.log(dataList);
-		if(dataList.length > 0 && isInit !== true){
-			openBottomSheet(CurrentMarkerList,{
-				markets: dataList
-			},'지도 내의 복권 판매점 목록');
-		}
+		markerList = [];
+		markerDataList = [];
+		processMarkersInBackground(data.lottoMarkets, map).then(() => {
+			console.log(markerDataList);
+			if(markerDataList.length >0){
+				openBottomSheet(CurrentMarkerList,{
+					markets: markerDataList,
+					map: map
+				},'로또 판매점 목록');
+			}	
+		});
 	}
 
 	function getGeolocation() {
@@ -157,7 +146,7 @@
 
 	function refreshShowingMarker(){
 		showRefreshButton = false;
-		updateMarkers(map,markerList,false);
+		updateMarkers(map,false);
 	}
 
 	function processMarkersInBackground(markets, map) {
@@ -171,7 +160,6 @@
 				for (let i = index; i < end; i++) {
 					var position = new naver.maps.LatLng(markets[i].lat, markets[i].lng);
 					let isInBoundary = bounds.hasLatLng(position);
-					console.log('isInBoundary : ', isInBoundary);
 					if(isInBoundary === true){
 						const lottoMarker = setMarker(markets[i], map, '#30343f');
 						var contentString = `
@@ -197,19 +185,18 @@
 
 						if (isMobileDevice() === false) {
 							naver.maps.Event.addListener(lottoMarker, 'mouseover', function() {
-								console.log('mouseover');
 								infowindow.open(map, lottoMarker);
 							});
 
 							naver.maps.Event.addListener(lottoMarker, 'mouseout', function() {
-								console.log('mouseout');
 								infowindow.close();
 							});
 						}
 						showMarker(map, lottoMarker);
 						markerList.push(lottoMarker);
+						markets[i].marker = lottoMarker;
+						markerDataList.push(markets[i]);
 					}
-					console.log(markerList);
 				}
 
 				index = end;

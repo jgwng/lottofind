@@ -3,20 +3,14 @@
 
     export let visible = false;
     export let onClose;
-    export let items = [];
     export let title = '';
-    export let onImageClick = (item) => {};
-
     function handleBackgroundClick(event) {
         if (event.target === event.currentTarget) {
+            visible = false;
             onClose();
         }
     }
 
-    function handleImageClick(image) {
-        onImageClick(image);
-        onClose();
-    }
 </script>
 
 <style>
@@ -38,7 +32,6 @@
         bottom: 0;
         left: 0;
         width: 100%;
-      
         background-color: #2c2c2e;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
@@ -46,10 +39,14 @@
         padding: 16px;
         box-sizing: border-box;
         z-index: 1202;
-        height: 45vh;
-        max-height: 45vh;
         display: flex;
         flex-direction: column;
+       transition: transform 0.3s ease-out;
+        transform: translateY(100%);
+    }
+    
+    .popup-container.open {
+      transform: translateY(0);
     }
 
     .overlay.active {
@@ -81,7 +78,7 @@
 <div class="overlay" class:active={visible} on:click={handleBackgroundClick}></div>
 
 <!-- Use Svelte's transition directive -->
-<div class="popup-container" transition:slide={{ duration: 300 }} class:open={visible}>
+<div class="popup-container" transition:slide={{ duration: 300 }} class:open={visible} id="bottom-sheet-container">
     <!-- Header with title and close button -->
     <div class="bottom-sheet-header">
         <span class="bottom-sheet-header-title">{title}</span>
