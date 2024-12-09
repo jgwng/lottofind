@@ -12,7 +12,7 @@ const db = admin.firestore();
 
 exports.updateLottoData = onSchedule(
     {
-        schedule: "5 21 * * 6", // 9:05 PM every Saturday
+        schedule: "30 21 * * 6", // 9:05 PM every Saturday
         timeZone: "Asia/Seoul", // Korea Standard Time
     },
     async (event) => {

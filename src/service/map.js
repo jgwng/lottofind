@@ -1,6 +1,6 @@
 function getMapSize() {
     const width = window.innerWidth;
-    const height = window.innerHeight;
+    const height = window.innerHeight - 60;
     return new naver.maps.Size(width, height);
 }
 

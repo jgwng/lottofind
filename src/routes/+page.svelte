@@ -22,8 +22,6 @@
 
 	let showSelectModal = false;
 	let showRefreshButton = false;
-
-	let isMarkerClick = true;
 	
 	let showSnackbar = false;
 	let snackbarMsg = '';
@@ -84,11 +82,7 @@
 		window.addEventListener('resize', () => handleResize(map));
 
 		idleListener = naver.maps.Event.addListener(map, 'idle', function(e) {
-			if(isMarkerClick === true){
-				isMarkerClick = false;
-			}else{
-				showRefreshButton = true;
-			}
+			showRefreshButton = true;
 			centerLatlng = { 
 				lat:  map.getCenter().y,
 				 lng: map.getCenter().x };

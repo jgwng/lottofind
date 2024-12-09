@@ -14,7 +14,7 @@
         align-items: center;
         justify-content: space-between;
         height: 60px;
-        padding: 0 20px;
+        padding: 0 16px;
         background-color: #f9f9f9;
         border-bottom: 1px solid #ddd;
     }
@@ -27,7 +27,6 @@
     }
 
     a {
-        padding: 8px 16px;
         font-size: 16px;
         text-decoration: none;
         color: #333;
@@ -36,9 +35,13 @@
     .logo{
         font-weight: bold;
         font-size: 20px;
+        padding-left: 4px;
+        color: #333;
     }
     a:hover {
-        background-color: #f0f0f0;
+        background-color: transparent;
+        text-decoration:none;
+        color: var(--main-color);
     }
 
     .divider {
@@ -56,6 +59,6 @@
     <div class="button-group">
         <a href={mapLink}>로또 판매점 찾기</a>
         <div class="divider"></div>
-        <a href={historyLink}>역대 당첨번호 조회</a>
+        <a href={historyLink}>회차별 당첨결과</a>
     </div>
 </header>

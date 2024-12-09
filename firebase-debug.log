@@ -1,0 +1,204 @@
+[debug] [2024-12-09T14:52:16.675Z] ----------------------------------------------------------------------
+[debug] [2024-12-09T14:52:16.677Z] Command:       /opt/homebrew/Cellar/node/22.3.0/bin/node /opt/homebrew/bin/firebase deploy --only functions:updateLottoData
+[debug] [2024-12-09T14:52:16.677Z] CLI Version:   13.27.0
+[debug] [2024-12-09T14:52:16.677Z] Platform:      darwin
+[debug] [2024-12-09T14:52:16.677Z] Node Version:  v22.3.0
+[debug] [2024-12-09T14:52:16.678Z] Time:          Mon Dec 09 2024 23:52:16 GMT+0900 (Korean Standard Time)
+[debug] [2024-12-09T14:52:16.678Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-09T14:52:16.721Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-09T14:52:16.721Z] > authorizing via signed-in user (gunwng123@gmail.com)
+[debug] [2024-12-09T14:52:16.721Z] [iam] checking project lottofind for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2024-12-09T14:52:16.722Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:16.722Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:16.722Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions [none]
+[debug] [2024-12-09T14:52:16.723Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:16.723Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-12-09T14:52:17.806Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions 200
+[debug] [2024-12-09T14:52:17.807Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-12-09T14:52:17.807Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:17.807Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:17.807Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/lottofind/serviceAccounts/lottofind@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2024-12-09T14:52:17.807Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/lottofind/serviceAccounts/lottofind@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2024-12-09T14:52:19.285Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/lottofind/serviceAccounts/lottofind@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2024-12-09T14:52:19.285Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/lottofind/serviceAccounts/lottofind@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'lottofind'...
+[info] 
+[info] i  deploying functions 
+[debug] [2024-12-09T14:52:19.288Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.288Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.288Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/lottofind [none]
+[debug] [2024-12-09T14:52:19.602Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/lottofind 200
+[debug] [2024-12-09T14:52:19.602Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/lottofind {"projectNumber":"1015311452814","projectId":"lottofind","lifecycleState":"ACTIVE","name":"lottofind","labels":{"firebase":"enabled"},"createTime":"2024-11-16T05:43:15.369679Z"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:19.604Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.604Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.605Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.605Z] Checked if tokens are valid: true, expires at: 1733759412036
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:19.605Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.605Z] Checked if tokens are valid: true, expires at: 1733759412036
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:19.605Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.605Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:19.605Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-12-09T14:52:19.606Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:19.607Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-12-09T14:52:19.607Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:19.609Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudbuild.googleapis.com [none]
+[debug] [2024-12-09T14:52:19.609Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudbuild.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:19.610Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/artifactregistry.googleapis.com [none]
+[debug] [2024-12-09T14:52:19.610Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/artifactregistry.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:21.081Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/runtimeconfig.googleapis.com 200
+[debug] [2024-12-09T14:52:21.082Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-12-09T14:52:21.082Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudbuild.googleapis.com 200
+[debug] [2024-12-09T14:52:21.082Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudbuild.googleapis.com [omitted]
+[info] ✔  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:21.101Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudfunctions.googleapis.com 200
+[debug] [2024-12-09T14:52:21.101Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudfunctions.googleapis.com [omitted]
+[info] ✔  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:21.117Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/artifactregistry.googleapis.com 200
+[debug] [2024-12-09T14:52:21.117Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/artifactregistry.googleapis.com [omitted]
+[info] ✔  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:21.118Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:21.118Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:21.118Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/lottofind/adminSdkConfig [none]
+[debug] [2024-12-09T14:52:21.637Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/lottofind/adminSdkConfig 200
+[debug] [2024-12-09T14:52:21.637Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/lottofind/adminSdkConfig {"projectId":"lottofind","storageBucket":"lottofind.firebasestorage.app"}
+[debug] [2024-12-09T14:52:21.637Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:21.638Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:21.638Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/lottofind/configs [none]
+[debug] [2024-12-09T14:52:22.904Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/lottofind/configs 200
+[debug] [2024-12-09T14:52:22.905Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/lottofind/configs {}
+[debug] [2024-12-09T14:52:22.908Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2024-12-09T14:52:23.335Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-12-09T14:52:23.335Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2024-12-09T14:52:23.336Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-12-09T14:52:23.340Z] Found firebase-functions binary at '/Users/gw/findlotto/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8423
+
+[error] (node:23365) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+[debug] [2024-12-09T14:52:23.665Z] Got response from /__/functions.yaml {"endpoints":{"updateLottoData":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"scheduleTrigger":{"schedule":"30 21 * * 6","retryConfig":{},"timeZone":"Asia/Seoul"},"entryPoint":"updateLottoData"}},"specVersion":"v1alpha1","requiredAPIs":[{"api":"cloudscheduler.googleapis.com","reason":"Needed for scheduled functions."}],"extensions":{}}
+[info] i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:28.683Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:28.683Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:28.683Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/firebaseextensions.googleapis.com [none]
+[debug] [2024-12-09T14:52:28.683Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/firebaseextensions.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:30.103Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/firebaseextensions.googleapis.com 200
+[debug] [2024-12-09T14:52:30.103Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/firebaseextensions.googleapis.com [omitted]
+[info] ✔  extensions: required API firebaseextensions.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:30.103Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-09T14:52:30.104Z] > authorizing via signed-in user (gunwng123@gmail.com)
+[debug] [2024-12-09T14:52:30.104Z] [iam] checking project lottofind for permissions ["firebase.projects.get","firebaseextensions.instances.list"]
+[debug] [2024-12-09T14:52:30.104Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:30.104Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:30.105Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions [none]
+[debug] [2024-12-09T14:52:30.105Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:30.105Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2024-12-09T14:52:31.207Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions 200
+[debug] [2024-12-09T14:52:31.207Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/lottofind:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2024-12-09T14:52:31.208Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:31.208Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:31.209Z] >>> [apiv2][query] GET https://firebaseextensions.googleapis.com/v1beta/projects/lottofind/instances pageSize=100&pageToken=
+[debug] [2024-12-09T14:52:32.600Z] <<< [apiv2][status] GET https://firebaseextensions.googleapis.com/v1beta/projects/lottofind/instances 200
+[debug] [2024-12-09T14:52:32.600Z] <<< [apiv2][body] GET https://firebaseextensions.googleapis.com/v1beta/projects/lottofind/instances {}
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged /Users/gw/findlotto/functions (1.65 KB) for uploading 
+[debug] [2024-12-09T14:52:32.624Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:32.624Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:32.625Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/lottofind/locations/-/functions [none]
+[debug] [2024-12-09T14:52:33.553Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/lottofind/locations/-/functions 200
+[debug] [2024-12-09T14:52:33.553Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/lottofind/locations/-/functions {}
+[debug] [2024-12-09T14:52:33.553Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:33.553Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:33.553Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/lottofind/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2024-12-09T14:52:35.062Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/lottofind/locations/-/functions 200
+[debug] [2024-12-09T14:52:35.063Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/lottofind/locations/-/functions {"functions":[{"name":"projects/lottofind/locations/us-central1/functions/updateLottoData","buildConfig":{"build":"projects/1015311452814/locations/us-central1/builds/186a51c9-aade-46cb-970b-bd35b74cf403","runtime":"nodejs18","entryPoint":"updateLottoData","source":{"storageSource":{"bucket":"gcf-v2-sources-1015311452814-us-central1","object":"updateLottoData/function-source.zip","generation":"1732716291343249"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/lottofind/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-1015311452814-us-central1","object":"updateLottoData/function-source.zip","generation":"1732716291343249"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/lottofind/serviceAccounts/1015311452814-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/lottofind/locations/us-central1/services/updatelottodata","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"lottofind\",\"storageBucket\":\"lottofind.firebasestorage.app\"}","GCLOUD_PROJECT":"lottofind","EVENTARC_CLOUD_EVENT_SOURCE":"projects/lottofind/locations/us-central1/services/updateLottoData","FUNCTION_TARGET":"updateLottoData","LOG_EXECUTION_ID":"true"},"maxInstanceCount":100,"ingressSettings":"ALLOW_ALL","uri":"https://updatelottodata-ewubupss6a-uc.a.run.app","serviceAccountEmail":"1015311452814-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"updatelottodata-00002-hup","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2024-11-27T14:05:39.422034550Z","labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"f74d01a126736e69db2f7bfdefe36291ea5ca001"},"environment":"GEN_2","url":"https://us-central1-lottofind.cloudfunctions.net/updateLottoData","createTime":"2024-11-26T14:20:10.057390892Z"}]}
+[info] i  functions: ensuring required API cloudscheduler.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:35.065Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:35.065Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:35.065Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudscheduler.googleapis.com [none]
+[debug] [2024-12-09T14:52:35.065Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudscheduler.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:36.313Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudscheduler.googleapis.com 200
+[debug] [2024-12-09T14:52:36.313Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/cloudscheduler.googleapis.com [omitted]
+[info] ✔  functions: required API cloudscheduler.googleapis.com is enabled 
+[info] i  functions: ensuring required API run.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:36.314Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:36.314Z] Checked if tokens are valid: true, expires at: 1733759412036
+[info] i  functions: ensuring required API eventarc.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:36.315Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:36.315Z] Checked if tokens are valid: true, expires at: 1733759412036
+[info] i  functions: ensuring required API pubsub.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:36.315Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:36.315Z] Checked if tokens are valid: true, expires at: 1733759412036
+[info] i  functions: ensuring required API storage.googleapis.com is enabled... 
+[debug] [2024-12-09T14:52:36.315Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:36.315Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:36.315Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/run.googleapis.com [none]
+[debug] [2024-12-09T14:52:36.315Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/run.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:36.316Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/eventarc.googleapis.com [none]
+[debug] [2024-12-09T14:52:36.316Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/eventarc.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:36.318Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/pubsub.googleapis.com [none]
+[debug] [2024-12-09T14:52:36.318Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/pubsub.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:36.319Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/storage.googleapis.com [none]
+[debug] [2024-12-09T14:52:36.319Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/storage.googleapis.com x-goog-quota-user=projects/lottofind
+[debug] [2024-12-09T14:52:36.709Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/run.googleapis.com 200
+[debug] [2024-12-09T14:52:36.709Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/run.googleapis.com [omitted]
+[info] ✔  functions: required API run.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:37.093Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/eventarc.googleapis.com 200
+[debug] [2024-12-09T14:52:37.093Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/eventarc.googleapis.com [omitted]
+[info] ✔  functions: required API eventarc.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:37.923Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/pubsub.googleapis.com 200
+[debug] [2024-12-09T14:52:37.923Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/pubsub.googleapis.com [omitted]
+[info] ✔  functions: required API pubsub.googleapis.com is enabled 
+[debug] [2024-12-09T14:52:37.926Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/storage.googleapis.com 200
+[debug] [2024-12-09T14:52:37.926Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/lottofind/services/storage.googleapis.com [omitted]
+[info] ✔  functions: required API storage.googleapis.com is enabled 
+[info] i  functions: generating the service identity for pubsub.googleapis.com... 
+[debug] [2024-12-09T14:52:37.926Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:37.926Z] Checked if tokens are valid: true, expires at: 1733759412036
+[info] i  functions: generating the service identity for eventarc.googleapis.com... 
+[debug] [2024-12-09T14:52:37.926Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:37.927Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:37.927Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/1015311452814/services/pubsub.googleapis.com:generateServiceIdentity [none]
+[debug] [2024-12-09T14:52:37.927Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/1015311452814/services/eventarc.googleapis.com:generateServiceIdentity [none]
+[debug] [2024-12-09T14:52:38.414Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/1015311452814/services/pubsub.googleapis.com:generateServiceIdentity 200
+[debug] [2024-12-09T14:52:38.414Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/1015311452814/services/pubsub.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-1015311452814@gcp-sa-pubsub.iam.gserviceaccount.com","uniqueId":"110426069316124936173"}}
+[debug] [2024-12-09T14:52:39.198Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/1015311452814/services/eventarc.googleapis.com:generateServiceIdentity 200
+[debug] [2024-12-09T14:52:39.198Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/1015311452814/services/eventarc.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-1015311452814@gcp-sa-eventarc.iam.gserviceaccount.com","uniqueId":"108359905608932542355"}}
+[debug] [2024-12-09T14:52:39.199Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:39.199Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:39.199Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/lottofind [none]
+[debug] [2024-12-09T14:52:40.430Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/lottofind 200
+[debug] [2024-12-09T14:52:40.430Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/lottofind {"projectNumber":"1015311452814","projectId":"lottofind","lifecycleState":"ACTIVE","name":"lottofind","labels":{"firebase":"enabled"},"createTime":"2024-11-16T05:43:15.369679Z"}
+[debug] [2024-12-09T14:52:40.432Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:40.432Z] Checked if tokens are valid: true, expires at: 1733759412036
+[debug] [2024-12-09T14:52:40.432Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/lottofind/billingInfo [none]
