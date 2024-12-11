@@ -1,277 +1,167 @@
 <script>
-	import { onMount, onDestroy} from 'svelte';
-	import {handleResize, setMarker, showMarker, hideMarker,setInitCenter} from '../service/map';
-	import { fade } from 'svelte/transition';
-	import { browser } from '$app/environment';
-	import {getSidoData} from '../service/firebase';
-	import SelectCityModal from '../component/modal/city_select.svelte';
-	import '../resources/app.css';
-	import '../resources/pin.css';
-	import data from '../resources/data.json';
-	import {isMobileDevice} from '../service/device';
-    import Snackbar from '../component/snackbar/snackbar.svelte';
-	import MobileNotice from '../component/modal/mobile_notice.svelte';
-	import {getTodayDate, create, openBottomSheet, getLocalToday} from '../service/common';
-	import CurrentMarkerList from '../component/bottomSheet/current_marker_list.svelte';
-
-	let map;
-	let sidoData = [];
-	let markerList = [];
-	let markerDataList = [];
-	let initCenter;
-
-	let showSelectModal = false;
-	let showRefreshButton = false;
-	
-	let showSnackbar = false;
-	let snackbarMsg = '';
-	let idleListener;
-
-	let centerLatlng;
-	$: centerLatlng, saveCenterLatLng();
-
-
-	onMount(async () => {	
-		checkShowModal();
-		initializeMap();
-		return ()=>{
-			window.removeEventListener('resize', () => handleResize(map));
-			naver.maps.Event.removeListener(dragEndListener);
-		};
+	import { onMount } from 'svelte';
+	let containerHeight;
+	let containerWidth;
+  
+	onMount(() => {
+	  updateContainerSize();
+	  window.addEventListener('resize', updateContainerSize);
+	  return () => {
+		window.removeEventListener('resize', updateContainerSize);
+	  };
 	});
-	
-	function checkShowModal(){
-		if(isMobileDevice() === false) return;
-
-		const today = getLocalToday();
-    	const lastSeenDate = localStorage.getItem('modalLastSeen'); 
-		if (lastSeenDate !== today) {
-			create(
-				MobileNotice,
-				document.querySelector('#modal'),
-			);
-			localStorage.setItem('modalLastSeen', today);
-		}
+  
+	function updateContainerSize() {
+	  containerHeight = window.innerHeight - 60;
+	  containerWidth = window.innerWidth;
 	}
-
-	function initializeMap(){
-		let lastCenter = setInitCenter();
-		initCenter = new naver.maps.LatLng(
-					lastCenter.lat,
-					lastCenter.lng
-		);
-		var mapOptions = {
-			center: initCenter,
-    		zoom: 16,
-		};
-		map = new naver.maps.Map('map', mapOptions);
-		
-		if(navigator.geolocation){
-			var latlng = {
-				lat: initCenter.y,
-				lng: initCenter.x
-			};		
-			var htmlMarker = setMarker(latlng,map,'#da1e37');
-		}
-		processMarkersInBackground(data.lottoMarkets, map);
-		
-		//렌더링 테스트로 임시로 갯수 설정 확인
-		handleResize(map);
-		
-		// Attach resize event listener
-		window.addEventListener('resize', () => handleResize(map));
-
-		idleListener = naver.maps.Event.addListener(map, 'idle', function(e) {
-			showRefreshButton = true;
-			centerLatlng = { 
-				lat:  map.getCenter().y,
-				 lng: map.getCenter().x };
-		});
-	}
-
-	function saveCenterLatLng(){
-		if(browser && centerLatlng){
-			localStorage.setItem("lastLatLng", JSON.stringify(centerLatlng));
-		}
-	}
-
-	function updateMarkers(map) {
-		for(var i = 0; i<markerList.length;i++){
-			hideMarker(map, markerList[i]);
-		}
-		markerList = [];
-		markerDataList = [];
-		processMarkersInBackground(data.lottoMarkets, map).then(() => {
-			console.log(markerDataList);
-			if(markerDataList.length >0){
-				openBottomSheet(CurrentMarkerList,{
-					markets: markerDataList,
-					map: map
-				},'로또 판매점 목록');
-			}	
-		});
-	}
-
-	function getGeolocation() {
-		return new Promise((resolve, reject) => {
-			navigator.geolocation.getCurrentPosition(resolve, reject);
-		});
-  	}	
-
-
-	function onSearchMap(city, address){
-		showSelectModal = false;
-		var newCity = new naver.maps.LatLng(city.centerLat, city.centerLon);
-		map.setCenter(newCity); 
-		map.setZoom(16);
-		showRefreshButton = true;
-	}
-
-	
-	function handleFabClick(){
-		if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition((position) => {
-					initCenter = new naver.maps.LatLng(position.coords.latitude,position.coords.longitude);
-					map.setCenter(initCenter);
-					map.setZoom(16);
-				}, ()=>{});
-		}
-	}
-
-	function refreshShowingMarker(){
-		showRefreshButton = false;
-		updateMarkers(map,false);
-	}
-
-	function processMarkersInBackground(markets, map) {
-		return new Promise((resolve) => {
-			let index = 0;
-			const batchSize = 100;
-
-			function processBatch() {
-				const end = Math.min(index + batchSize, markets.length);
-				const bounds = map.getBounds();
-				for (let i = index; i < end; i++) {
-					var position = new naver.maps.LatLng(markets[i].lat, markets[i].lng);
-					let isInBoundary = bounds.hasLatLng(position);
-					if(isInBoundary === true){
-						const lottoMarker = setMarker(markets[i], map, '#30343f');
-						var contentString = `
-							<div class="infoWindow">
-								<div class="infoWindow-text">${markets[i].storeName}</div>
-							</div>
-						`;
-
-						const infowindow = new naver.maps.InfoWindow({
-							content: contentString,
-							borderWidth: 0,
-							pixelOffset: new naver.maps.Point(-27, -35),
-							disableAnchor: true,
-							backgroundColor: 'transparent',
-						});
-
-						naver.maps.Event.addListener(lottoMarker, 'click', (e) => {
-							var markerPosition = new naver.maps.LatLng(e.coord.y, e.coord.x);
-							map.panTo(markerPosition, { duration: 200 });
-							console.log(markets[i]);
-							copyToClipboard(markets[i].roadAddr);
-						});
-
-						if (isMobileDevice() === false) {
-							naver.maps.Event.addListener(lottoMarker, 'mouseover', function() {
-								infowindow.open(map, lottoMarker);
-							});
-
-							naver.maps.Event.addListener(lottoMarker, 'mouseout', function() {
-								infowindow.close();
-							});
-						}
-						showMarker(map, lottoMarker);
-						markerList.push(lottoMarker);
-						markets[i].marker = lottoMarker;
-						markerDataList.push(markets[i]);
-					}
-				}
-
-				index = end;
-
-				if (index < markets.length) {
-					setTimeout(processBatch, 0);
-				} else {
-					resolve(); // Resolve the promise when processing is complete
-				}
-			}
-
-			processBatch();
-		});
-	}
-
-	async function copyToClipboard(msg) {
-        try {
-            await navigator.clipboard.writeText(msg);
-			snackbarMsg = '가게 주소를 복사했습니다!';
-			create(
-				Snackbar,
-				document.querySelector('#snackbar'),
-				{ 
-					isVisible: true,
-					msg: snackbarMsg
-				}
-    		);
-        }
-		catch (err) {
-			snackbarMsg = '가게 주소 복사를 실패했습니다.';
-			create(
-				Snackbar,
-				document.querySelector('#snackbar'),
-				{ 
-					isVisible: true,
-					msg: snackbarMsg
-				}
-    		);
-            console.error('Failed to copy: ', err);
-        }
-    }
-
-	function onTapSearchArea(){
-		create(
-			SelectCityModal,
-			document.querySelector('#modal'),
-			{ 
-				isOpen: true,
-				onTapConfirm: onSearchMap
-			}
-    	);
-	}
-</script>
-
-<div style="width: 100%; height:400px;">
-	<div id="map"></div>
-</div>
-
-{#if showRefreshButton}
-<button class="refresh" in:fade={{ duration: 200 }} out:fade={{ duration: 200 }} on:click={refreshShowingMarker}>
-	<div class="content">
-		현 위치에서 검색
-		<img class ="buttonImg" src="./assets/refresh.svg" alt="search" />
+  </script>
+  
+  <main 
+	class="container"
+	style="width: {containerWidth}px; height: {containerHeight}px;"
+  >
+	<div class="hero-section">
+	  <h1 class="main-title">
+		<span class="highlight">대박날지도</span>
+	  </h1>
+	  
+	  <div class="features-container">
+		<div class="feature-card">
+		  <h2 class="feature-title">로또 판매점 찾기</h2>
+		  <p class="feature-description">
+			내 주변 가까운 로또 판매점을<br />
+			쉽고 빠르게 찾아보세요
+		  </p>
+		  <a href="/map" class="feature-button">
+			판매점 찾기
+		  </a>
+		</div>
+  
+		<div class="divider"></div>
+  
+		<div class="feature-card">
+		  <h2 class="feature-title">회차별 당첨결과</h2>
+		  <p class="feature-description">
+			회차별 당첨번호와<br />
+			당첨 통계를 확인해보세요
+		  </p>
+		  <a href="/history" class="feature-button">
+			당첨결과 보기
+		  </a>
+		</div>
 	  </div>
-  </button>
-{/if}
-
-  <button
-  class="searchArea"
-  on:click={onTapSearchArea}
->
-  <div class="content">
-    지역검색
-    <img class ="buttonImg" src="./assets/down.svg" alt="search" />
-  </div>
-</button>
-
-
-<button
-  class="fab"
-  on:click={handleFabClick}
->
-  <img src='./assets/location.svg' style="width:24px;height:24px;" alt='search'>
-</button>
+	</div>
+  </main>
+  
+  <style>
+	.container {
+	  position: relative;
+	  background: #EFF1F6;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  overflow: hidden;
+	}
+  
+	.hero-section {
+	  position: absolute;
+	  left: 50%;
+	  top: 50%;
+	  transform: translate(-50%, -50%);
+	  text-align: center;
+	  max-width: 1200px;
+	  width: 90%;
+	  padding: 2rem;
+	}
+  
+	.main-title {
+	  font-size: 3rem;
+	  margin-bottom: 3rem;
+	  color: #1F1F1F;
+	  text-align: center;
+	}
+  
+	.features-container {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 2rem;
+	  margin-top: 2rem;
+	}
+  
+	.feature-card {
+	  flex: 1;
+	  max-width: 400px;
+	  padding: 2rem;
+	  background: rgba(255, 255, 255, 0.9);
+	  border-radius: 16px;
+	  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	  transition: transform 0.3s ease;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  justify-content: center;
+	  text-align: center;
+	}
+  
+	.feature-card:hover {
+	  transform: translateY(-5px);
+	}
+  
+	.feature-title {
+	  font-size: 1.8rem;
+	  color: #1F1F1F;
+	  margin-bottom: 1rem;
+	  text-align: center;
+	}
+  
+	.feature-description {
+	  font-size: 1.1rem;
+	  color: #666;
+	  line-height: 1.6;
+	  margin-bottom: 2rem;
+	  text-align: center;
+	}
+  
+	.feature-button {
+	  display: inline-block;
+	  padding: 1rem 2rem;
+	  background: #da1e37;
+	  color: white;
+	  text-decoration: none;
+	  border-radius: 25px;
+	  font-weight: bold;
+	  transition: all 0.3s ease;
+	}
+  
+	.feature-button:hover {
+	  background: #b91830;
+	  transform: scale(1.05);
+	}
+  
+	.divider {
+	  width: 2px;
+	  background: linear-gradient(to bottom, transparent, #ddd, transparent);
+	  align-self: stretch;
+	}
+  
+	@media (max-width: 768px) {
+	  .features-container {
+		flex-direction: column;
+		gap: 1.5rem;
+	  }
+  
+	  .divider {
+		display: none;
+	  }
+  
+	  .feature-card {
+		max-width: 100%;
+	  }
+  
+	  .hero-section {
+		padding: 1rem;
+	  }
+	}
+  </style>
